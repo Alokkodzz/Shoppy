@@ -11,6 +11,7 @@ import CartPage from './pages/CartPage';
 import CheckoutPage from './pages/CheckoutPage';
 import OrderHistoryPage from './pages/OrderHistoryPage';
 import OrderSuccessPage from './pages/OrderSuccessPage';
+import AddProductPage from './pages/AddProductPage';
 
 const theme = createTheme({
   palette: {
@@ -34,10 +35,12 @@ function App() {
             <Route path="/" element={<HomePage />} />
             <Route path="/products" element={<ProductListPage />} />
             <Route path="/products/:id" element={<ProductDetailPage />} />
+            <Route path="/add-product" element={<AddProductPage />} />
             <Route path="/cart" element={<CartPage />} />
             <Route path="/checkout" element={<CheckoutPage />} />
             <Route path="/orders" element={<OrderHistoryPage />} />
             <Route path="/order-success" element={<OrderSuccessPage />} />
+            <Route path="*" element={<div>Page not found</div>} />
           </Routes>
           <Footer />
         </BrowserRouter>
