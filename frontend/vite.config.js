@@ -2,7 +2,14 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
 export default defineConfig({
-  plugins: [react()],
+  plugins: [
+    react({
+      jsxImportSource: '@emotion/react',
+      babel: {
+        plugins: ['@emotion/babel-plugin'],
+      },
+    })
+  ],
   server: {
     port: 3000,
     proxy: {
@@ -20,14 +27,28 @@ export default defineConfig({
     outDir: 'dist',
     assetsDir: 'assets',
     sourcemap: true,
-    chunkSizeWarningLimit: 1000, // Increase chunk size warning limit (in kB)
+    chunkSizeWarningLimit: 2000,
     rollupOptions: {
       output: {
-        manualChunks: {
-          mui: ['@mui/material', '@mui/icons-material'],
-          vendor: ['react', 'react-dom', 'react-router-dom']
+        manualChunks(id) {
+          if (id.includes('node_modules')) {
+            const module = id.toString().split('node_modules/')[1].split('/')[0]
+            // Ensure MUI and Emotion are bundled together
+            if (module === '@mui' || module === '@emotion') {
+              return 'mui'
+            }
+            return module
+          }
         }
       }
     }
+  },
+  optimizeDeps: {
+    include: [
+      '@emotion/react',
+      '@emotion/styled',
+      '@mui/material',
+      '@mui/icons-material'
+    ],
   }
 })
