@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  frontend:
+    build: 
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:80"
+    depends_on:
+      - product-service
+      - order-service
+    environment:
+      - REACT_APP_PRODUCT_SERVICE_URL=http://product-service:5001/api
+      - REACT_APP_ORDER_SERVICE_URL=http://order-service:5002/api
+
+  product-service:
+    image: product-service
+    build:
+      context: ./product-service/ProductService
+      dockerfile: Dockerfile
+    ports:
+      - "5001:80"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ConnectionStrings__ProductDb=Host=na4-aurora-pgsql1.cadyqeag4uyf.us-east-1.rds.amazonaws.com;Database=productdb;Username=postgres;Password=spee1der
+      - AWS__BucketName=alok-production-artifacts
+
+
+  order-service:
+    image: order-service
+    build:
+      context: ./order-service/OrderService
+      dockerfile: Dockerfile
+    ports:
+      - "5002:80"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ConnectionStrings__OrderDb=Host=na4-aurora-pgsql1.cadyqeag4uyf.us-east-1.rds.amazonaws.com;Database=orderdb;Username=postgres;Password=spee1der
