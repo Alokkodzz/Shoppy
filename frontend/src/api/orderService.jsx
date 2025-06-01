@@ -1,6 +1,8 @@
 import axios from 'axios';
 
-const API_URL = process.env.VITE_PRODUCT_SERVICE_URL || 'http://3.94.57.46:5002/api';
+//const API_URL = process.env.VITE_PRODUCT_SERVICE_URL || 'http://3.94.57.46:5002/api';
+
+const API_URL = 'http://3.94.57.46:5002/api';
 
 export const createOrder = async (orderData) => {
   try {

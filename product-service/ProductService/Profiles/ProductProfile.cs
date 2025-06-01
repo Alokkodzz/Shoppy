@@ -1,6 +1,7 @@
+// In Profiles/ProductProfile.cs
 using AutoMapper;
+using ProductService.Entities;
 using ProductService.DTOs;
-using ProductService.Models;
 
 namespace ProductService.Profiles
 {
@@ -8,13 +9,14 @@ namespace ProductService.Profiles
     {
         public ProductProfile()
         {
-            // Source → Destination
+            // Individual mappings
+            CreateMap<Product, ProductDto>();
             CreateMap<ProductCreateDto, Product>()
-                .ForMember(dest => dest.ImageUrl, opt => opt.Ignore()) // Handle separately
+                .ForMember(dest => dest.ImageUrl, opt => opt.Ignore())
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(_ => Guid.NewGuid()));
 
-            // Add reverse mapping if needed
-            CreateMap<Product, ProductReadDto>(); // If you have a read DTO
+            // Collection mappings (not strictly needed as AutoMapper handles this automatically)
+            CreateMap<List<Product>, IEnumerable<ProductDto>>();
         }
     }
 }
