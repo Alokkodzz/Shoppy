@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = process.env.VITE_ORDER_SERVICE_URL || 'http://localhost:5001/api';
+const API_URL = process.env.VITE_ORDER_SERVICE_URL || 'http://3.94.57.46:5001/api';
 
 export const getProducts = async (page = 1, pageSize = 10) => {
   try {
