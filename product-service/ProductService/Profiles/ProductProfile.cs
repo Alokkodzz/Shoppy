@@ -15,8 +15,6 @@ namespace ProductService.Profiles
                 .ForMember(dest => dest.ImageUrl, opt => opt.Ignore())
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(_ => Guid.NewGuid()));
 
-            // Collection mappings (not strictly needed as AutoMapper handles this automatically)
-            CreateMap<List<Product>, IEnumerable<ProductDto>>();
         }
     }
 }
