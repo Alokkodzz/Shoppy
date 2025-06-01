@@ -50,6 +50,8 @@ namespace ProductService.Controllers
             if (productDto.ImageFile != null)
             {
                 product.ImageUrl = await _imageService.UploadImageAsync(productDto.ImageFile);
+                //product.ImageUrl = await _imageService.UploadImageToS3(productDto.ImageFile);
+                product.ImageUrl = imageUrl;
             }
 
             await _repository.AddAsync(product);
@@ -57,6 +59,16 @@ namespace ProductService.Controllers
                 nameof(GetProduct), 
                 new { id = product.Id }, 
                 _mapper.Map<ProductDto>(product));
+        }
+        catch (AutoMapperMappingException ex)
+        {
+            _logger.LogError(ex, "Mapping failed");
+            return BadRequest("Invalid data format");
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error creating product");
+            return StatusCode(500, "Internal server error");
         }
 
         [HttpPut("{id}")]
