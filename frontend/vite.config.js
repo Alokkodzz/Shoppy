@@ -14,11 +14,11 @@ export default defineConfig({
     port: 3000,
     proxy: {
       '/api/products': {
-        target: 'http://product-service:5001',
+        target: 'http://3.94.57.46:5001',
         changeOrigin: true
       },
       '/api/orders': {
-        target: 'http://order-service:5002',
+        target: 'http://3.94.57.46:5002',
         changeOrigin: true
       }
     }
