@@ -24,7 +24,7 @@ const NavBar = () => {
           to="/" 
           sx={{ flexGrow: 1, textDecoration: 'none', color: 'inherit' }}
         >
-          ShopFront
+          Home
         </Typography>
         
         <Box sx={{ display: 'flex', alignItems: 'center' }}>

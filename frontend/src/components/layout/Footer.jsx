@@ -17,10 +17,10 @@ const Footer = () => {
     >
       <Container maxWidth="lg">
         <Typography variant="body1" align="center">
-          © {new Date().getFullYear()} ShopFront - All rights reserved
+          © {new Date().getFullYear()} Shoppy - All rights reserved
         </Typography>
         <Typography variant="body2" align="center" color="text.secondary">
-          An Amazon-like e-commerce platform
+          An e-commerce platform build by Alok
         </Typography>
       </Container>
     </Box>
