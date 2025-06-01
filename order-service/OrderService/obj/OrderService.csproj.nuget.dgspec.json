@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "E:\\Alok_AWS\\Devops_Notes\\AmazonShoppingApp\\product-service\\ProductService\\ProductService.csproj": {}
+    "E:\\Alok_AWS\\Devops_Notes\\AmazonShoppingApp\\order-service\\OrderService\\OrderService.csproj": {}
   },
   "projects": {
-    "E:\\Alok_AWS\\Devops_Notes\\AmazonShoppingApp\\product-service\\ProductService\\ProductService.csproj": {
+    "E:\\Alok_AWS\\Devops_Notes\\AmazonShoppingApp\\order-service\\OrderService\\OrderService.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "E:\\Alok_AWS\\Devops_Notes\\AmazonShoppingApp\\product-service\\ProductService\\ProductService.csproj",
-        "projectName": "ProductService",
-        "projectPath": "E:\\Alok_AWS\\Devops_Notes\\AmazonShoppingApp\\product-service\\ProductService\\ProductService.csproj",
+        "projectUniqueName": "E:\\Alok_AWS\\Devops_Notes\\AmazonShoppingApp\\order-service\\OrderService\\OrderService.csproj",
+        "projectName": "OrderService",
+        "projectPath": "E:\\Alok_AWS\\Devops_Notes\\AmazonShoppingApp\\order-service\\OrderService\\OrderService.csproj",
         "packagesPath": "C:\\Users\\Alok\\.nuget\\packages\\",
-        "outputPath": "E:\\Alok_AWS\\Devops_Notes\\AmazonShoppingApp\\product-service\\ProductService\\obj\\",
+        "outputPath": "E:\\Alok_AWS\\Devops_Notes\\AmazonShoppingApp\\order-service\\OrderService\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Alok\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -41,14 +41,6 @@
             "AWSSDK.Extensions.NETCore.Setup": {
               "target": "Package",
               "version": "[3.7.0, )"
-            },
-            "AWSSDK.S3": {
-              "target": "Package",
-              "version": "[3.7.100, )"
-            },
-            "AutoMapper.Extensions.Microsoft.DependencyInjection": {
-              "target": "Package",
-              "version": "[12.0.1, )"
             },
             "Microsoft.EntityFrameworkCore": {
               "target": "Package",
