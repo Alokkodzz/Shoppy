@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using ProductService.Data;
 using ProductService.Extensions;
+using ProductService.Profiles;
 
 var builder = WebApplication.CreateBuilder(args);
 
