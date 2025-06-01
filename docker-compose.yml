@@ -23,7 +23,7 @@ services:
       - "5001:80"
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
-      - ConnectionStrings__ProductDb=Host=na4-aurora-pgsql1.cadyqeag4uyf.us-east-1.rds.amazonaws.com;Database=productdb;Username=postgres;Password=spee1der
+      - ConnectionStrings__ProductDb=Host=na4-aurora-pgsql1.cadyqeag4uyf.us-east-1.rds.amazonaws.com;Database=productdb;Username=postgres;Password=spee1der;Search Path=product_service;
       - AWS__BucketName=alok-production-artifacts
 
 
@@ -36,4 +36,4 @@ services:
       - "5002:80"
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
-      - ConnectionStrings__OrderDb=Host=na4-aurora-pgsql1.cadyqeag4uyf.us-east-1.rds.amazonaws.com;Database=orderdb;Username=postgres;Password=spee1der
+      - ConnectionStrings__OrderDb=Host=na4-aurora-pgsql1.cadyqeag4uyf.us-east-1.rds.amazonaws.com;Database=orderdb;Username=postgres;Password=spee1der;Search Path=order_service
