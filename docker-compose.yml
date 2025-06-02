@@ -22,6 +22,9 @@ services:
     ports:
       - "5001:80"
     environment:
+      - AWS_ACCESS_KEY_ID=
+      - AWS_SECRET_ACCESS_KEY=
+      - AWS_REGION=us-east-1
       - ASPNETCORE_ENVIRONMENT=Production
       - ConnectionStrings__ProductDb=Host=na4-aurora-pgsql1.cadyqeag4uyf.us-east-1.rds.amazonaws.com;Database=productdb;Username=postgres;Password=spee1der;Search Path=product_service
       - AWS__BucketName=alok-production-artifacts

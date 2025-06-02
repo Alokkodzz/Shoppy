@@ -14,6 +14,9 @@ namespace OrderService.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+
+            modelBuilder.HasPostgresEnum<OrderStatus>();
+            
             modelBuilder.Entity<Order>(entity =>
             {
                 entity.HasKey(o => o.Id);

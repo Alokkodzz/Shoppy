@@ -19,7 +19,8 @@ BEGIN
             'Processing',
             'Shipped',
             'Delivered',
-            'Cancelled'
+            'Cancelled',
+            'OrderReceived'
         );
     END IF;
 END
@@ -76,21 +77,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
--- Create a view for order summaries
-CREATE VIEW order_service."OrderSummaries" AS
-SELECT 
-    o."Id",
-    o."UserId",
-    o."Status",
-    o."CreatedAt",
-    order_service.calculate_order_total(o."Id") AS "TotalAmount",
-    COUNT(oi."Id") AS "ItemCount"
-FROM 
-    order_service."Orders" o
-LEFT JOIN 
-    order_service."OrderItems" oi ON o."Id" = oi."OrderId"
-GROUP BY 
-    o."Id";
+
 
 -- Create a user with appropriate permissions
 DO $$
@@ -106,3 +93,23 @@ GRANT USAGE ON SCHEMA order_service TO order_service_user;
 GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA order_service TO order_service_user;
 GRANT EXECUTE ON ALL FUNCTIONS IN SCHEMA order_service TO order_service_user;
 GRANT SELECT ON ALL SEQUENCES IN SCHEMA order_service TO order_service_user;
+
+SET search_path TO order_service;
+
+-- Create the EF migrations history table
+CREATE TABLE "__EFMigrationsHistory" (
+    "MigrationId" VARCHAR(150) NOT NULL,
+    "ProductVersion" VARCHAR(32) NOT NULL,
+    CONSTRAINT "PK___EFMigrationsHistory" PRIMARY KEY ("MigrationId")
+);
+
+-- Add comments
+COMMENT ON TABLE "__EFMigrationsHistory" IS 'Used by Entity Framework Core to track which migrations have been applied';
+COMMENT ON COLUMN "__EFMigrationsHistory"."MigrationId" IS 'The unique identifier for a migration';
+COMMENT ON COLUMN "__EFMigrationsHistory"."ProductVersion" IS 'The version of EF Core used to create the migration';
+
+-- Grant permissions to your service user
+GRANT SELECT, INSERT ON "__EFMigrationsHistory" TO order_service_user;
+
+ALTER TABLE "Orders";
+ALTER COLUMN "Status" TYPE TEXT USING "Status"::TEXT;

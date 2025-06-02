@@ -6,7 +6,7 @@ const HomePage = () => {
   return (
     <Container maxWidth="lg" sx={{ mt: 4, textAlign: 'center' }}>
       <Typography variant="h2" gutterBottom>
-        Welcome to Our Store
+        Welcome to the online Store by Alok
       </Typography>
       <Typography variant="h5" paragraph>
         Discover amazing products at great prices

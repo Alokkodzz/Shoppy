@@ -27,7 +27,7 @@ const ProductListPage = () => {
       try {
         setLoading(true);
         const data = await getProducts(page, 10);
-        setProducts(data.items);
+        setProducts(data);
         setTotalPages(data.totalPages);
       } catch (error) {
         console.error('Error fetching products:', error);
@@ -56,7 +56,7 @@ const ProductListPage = () => {
         Products
       </Typography>
       <Grid container spacing={4}>
-        {products.map((product) => (
+        {Array.isArray(products) && products.map(product => (
           <Grid item key={product.id} xs={12} sm={6} md={4} lg={3}>
             <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
               <CardMedia
