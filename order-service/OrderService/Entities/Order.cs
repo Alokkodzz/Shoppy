@@ -2,7 +2,7 @@ namespace OrderService.Entities
 {
     public enum OrderStatus
     {
-        Pending,
+        OrderReceived,
         Processing,
         Shipped,
         Delivered,

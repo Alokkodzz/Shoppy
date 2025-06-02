@@ -50,3 +50,9 @@ GRANT CONNECT ON DATABASE productdb TO product_service_user;
 GRANT USAGE ON SCHEMA product_service TO product_service_user;
 GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA product_service TO product_service_user;
 GRANT EXECUTE ON ALL FUNCTIONS IN SCHEMA product_service TO product_service_user;
+
+CREATE TABLE product_service."__EFMigrationsHistory" (
+    "MigrationId" character varying(150) NOT NULL,
+    "ProductVersion" character varying(32) NOT NULL,
+    CONSTRAINT "PK___EFMigrationsHistory" PRIMARY KEY ("MigrationId")
+);

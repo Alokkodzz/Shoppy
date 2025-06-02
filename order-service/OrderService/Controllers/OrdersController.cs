@@ -57,7 +57,7 @@ namespace OrderService.Controllers
                 var order = new Order
                 {
                     UserId = orderDto.UserId,
-                    Status = OrderStatus.Pending,
+                    Status = Enum.Parse<OrderStatus>("OrderReceived"),
                     OrderItems = orderDto.Items.Select(i => new OrderItem
                     {
                         ProductId = i.ProductId,
