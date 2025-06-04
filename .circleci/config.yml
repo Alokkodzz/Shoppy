@@ -11,7 +11,7 @@ executors:
 jobs:
   nodejs-ci:
     executor: node_executor
-    working_directory: ~/shoppy/frontend
+    working_directory: ~/project/frontend
     steps:
       - checkout
       - run:
