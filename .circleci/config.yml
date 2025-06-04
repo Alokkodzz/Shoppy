@@ -3,17 +3,18 @@ version: 2.1
 executors:
   node_executor:
     docker:
-      - image: cimg/node:18.20.0
+      - image: node:18-alpine
   dotnet_executor:
     docker:
-      - image: mcr.microsoft.com/dotnet/sdk:7.0
+      - image: mcr.microsoft.com/dotnet/sdk:6.0
 
 jobs:
   nodejs-ci:
     executor: node_executor
-    working_directory: ~/frontend
+    working_directory: ~/project/shoppy/frontend
     steps:
       - checkout
+      - path: ~/project
       - run:
           name: Install dependencies
           command: npm install 
@@ -29,7 +30,7 @@ jobs:
 
   dotnet-ci-order-service:
     executor: dotnet_executor
-    working_directory: ~/order-service/OrderService
+    working_directory: ~/shoppy/order-service
     steps:
       - checkout
       - run:
@@ -44,7 +45,7 @@ jobs:
 
   dotnet-ci-product-service:
     executor: dotnet_executor
-    working_directory: ~/product-service/ProductService
+    working_directory: ~/shoppy/product-service
     steps:
       - checkout
       - run:
