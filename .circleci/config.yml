@@ -3,7 +3,8 @@ version: 2.1
 executors:
   node_executor:
     docker:
-      - image: cimg/node:18.20.0
+      #- image: cimg/node:18.20.0
+      - image: cimg/base:stable
   dotnet_executor:
     docker:
       - image: mcr.microsoft.com/dotnet/sdk:7.0
