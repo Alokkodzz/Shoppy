@@ -11,10 +11,10 @@ executors:
 jobs:
   nodejs-ci:
     executor: node_executor
-    working_directory: ~/project/shoppy/frontend
+    working_directory: ~/shoppy/frontend
     steps:
       - checkout:
-          path: ~/project
+          path: ~/shoppy
       - run:
           name: Install dependencies
           command: npm install 
