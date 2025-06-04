@@ -32,7 +32,8 @@ jobs:
     executor: dotnet_executor
     working_directory: ~/shoppy/order-service
     steps:
-      - checkout
+      - checkout:
+          path: ~/shoppy
       - run:
           name: Restore Dependencies
           command: dotnet restore
@@ -47,7 +48,8 @@ jobs:
     executor: dotnet_executor
     working_directory: ~/shoppy/product-service
     steps:
-      - checkout
+      - checkout:
+          path: ~/shoppy
       - run:
           name: Restore Dependencies
           command: dotnet restore
