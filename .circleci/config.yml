@@ -1,0 +1,66 @@
+version: 2.1
+
+executors:
+  node_executor:
+    docker:
+      - image: cimg/node:18.20.0
+  dotnet_executor:
+    docker:
+      - image: mcr.microsoft.com/dotnet/sdk:7.0
+
+jobs:
+  nodejs-ci:
+    executor: node_executor
+    working_directory: ~/frontend
+    steps:
+      - checkout
+      - run:
+          name: Install dependencies
+          command: npm install 
+      - run:
+          name: Run Lint
+          command: npm run lint
+      - run:
+          name: Run Tests
+          command: npm test
+      - run:
+          name: Build Vite App
+          command: npm run build
+
+  dotnet-ci-order-service:
+    executor: dotnet_executor
+    working_directory: ~/order-service/OrderService
+    steps:
+      - checkout
+      - run:
+          name: Restore Dependencies
+          command: dotnet restore
+      - run:
+          name: Build Project
+          command: dotnet build --no-restore
+      - run:
+          name: Run Tests
+          command: dotnet test --no-build --verbosity normal
+
+  dotnet-ci-product-service:
+    executor: dotnet_executor
+    working_directory: ~/product-service/ProductService
+    steps:
+      - checkout
+      - run:
+          name: Restore Dependencies
+          command: dotnet restore
+      - run:
+          name: Build Project
+          command: dotnet build --no-restore
+      - run:
+          name: Run Tests
+          command: dotnet test --no-build --verbosity normal
+
+workflows:
+  version: 2
+  build_and_test:
+    jobs:
+      - nodejs-ci
+      - dotnet-ci-order-service
+      - dotnet-ci-product-service
