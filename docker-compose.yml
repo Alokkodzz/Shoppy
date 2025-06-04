@@ -3,7 +3,7 @@ version: '3.8'
 services:
   frontend:
     build: 
-      context: ./shoppy/frontend
+      context: ./frontend
       dockerfile: Dockerfile
     ports:
       - "3000:80"
@@ -17,7 +17,7 @@ services:
   product-service:
     image: product-service
     build:
-      context: ./shoppy/product-service/ProductService
+      context: ./product-service/ProductService
       dockerfile: Dockerfile
     ports:
       - "5001:80"
@@ -33,7 +33,7 @@ services:
   order-service:
     image: order-service
     build:
-      context: ./shoppy/order-service/OrderService
+      context: ./order-service/OrderService
       dockerfile: Dockerfile
     ports:
       - "5002:80"
