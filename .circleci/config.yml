@@ -43,6 +43,7 @@ jobs:
       - run:
           name: Run Tests
           command: dotnet test --no-build --verbosity normal
+      - needs: nodejs-ci
 
   dotnet-ci-product-service:
     executor: dotnet_executor_2
@@ -60,6 +61,7 @@ jobs:
       - run:
           name: Run Tests
           command: dotnet test --no-build --verbosity normal
+      - needs: dotnet-ci-order-service
 
 workflows:
   version: 2
