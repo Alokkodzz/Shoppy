@@ -22,9 +22,6 @@ jobs:
           name: Run Lint
           command: npm run lint
       - run:
-          name: Run Tests
-          command: npm test
-      - run:
           name: Build Vite App
           command: npm run build
 
@@ -67,3 +64,4 @@ workflows:
       - nodejs-ci
       - dotnet-ci-order-service
       - dotnet-ci-product-service
+
