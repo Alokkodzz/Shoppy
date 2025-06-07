@@ -51,6 +51,7 @@ jobs:
       - checkout:
           path: ~/shoppy
       - run:
+          path: ~/shoppy/product-service
           name: Restore Dependencies
           command: dotnet restore
       - run:
