@@ -11,10 +11,10 @@ executors:
 jobs:
   nodejs-ci:
     executor: node_executor
-    working_directory: ~/project/shoppy/frontend
+    working_directory: ~/shoppy/frontend
     steps:
-      - checkout
-      - path: ~/project
+      - checkout:
+          path: ~/shoppy
       - run:
           name: Install dependencies
           command: npm install 
@@ -32,7 +32,8 @@ jobs:
     executor: dotnet_executor
     working_directory: ~/shoppy/order-service
     steps:
-      - checkout
+      - checkout:
+          path: ~/shoppy
       - run:
           name: Restore Dependencies
           command: dotnet restore
@@ -47,7 +48,8 @@ jobs:
     executor: dotnet_executor
     working_directory: ~/shoppy/product-service
     steps:
-      - checkout
+      - checkout:
+          path: ~/shoppy
       - run:
           name: Restore Dependencies
           command: dotnet restore

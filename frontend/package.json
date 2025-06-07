@@ -8,7 +8,8 @@
     "build": "vite build",
     "preview": "vite preview",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "test": "vitest"
   },
   "dependencies": {
     "@mui/icons-material": "^5.14.5",
@@ -31,7 +32,7 @@
     "@types/react-dom": "^18.2.7",
     "@vitejs/plugin-react": "^4.0.3",
     "autoprefixer": "^10.4.15",
-    "eslint": "^8.45.0",
+    "eslint": "^8.57.1",
     "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-import": "^2.28.0",
     "eslint-plugin-jsx-a11y": "^6.7.1",
@@ -41,6 +42,8 @@
     "postcss": "^8.4.29",
     "prettier": "^3.0.2",
     "tailwindcss": "^3.3.3",
-    "vite": "^6.3.5"
+    "vite": "^6.3.5",
+    "@babel/eslint-parser": "^7.24.1",
+    "@babel/preset-react": "^7.24.1"
   }
 }
