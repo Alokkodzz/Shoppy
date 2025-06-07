@@ -4,7 +4,10 @@ executors:
   node_executor:
     docker:
       - image: node:18-alpine
-  dotnet_executor:
+  dotnet_executor_1:
+    docker:
+      - image: mcr.microsoft.com/dotnet/sdk:6.0
+  dotnet_executor_2:
     docker:
       - image: mcr.microsoft.com/dotnet/sdk:6.0
 
@@ -22,14 +25,11 @@ jobs:
           name: Run Lint
           command: npm run lint
       - run:
-          name: Run Tests
-          command: npm test
-      - run:
           name: Build Vite App
           command: npm run build
 
   dotnet-ci-order-service:
-    executor: dotnet_executor
+    executor: dotnet_executor_1
     working_directory: ~/shoppy/order-service
     steps:
       - checkout:
@@ -43,14 +43,16 @@ jobs:
       - run:
           name: Run Tests
           command: dotnet test --no-build --verbosity normal
+      - needs: nodejs-ci
 
   dotnet-ci-product-service:
-    executor: dotnet_executor
+    executor: dotnet_executor_2
     working_directory: ~/shoppy/product-service
     steps:
       - checkout:
           path: ~/shoppy
       - run:
+          path: ~/shoppy/product-service
           name: Restore Dependencies
           command: dotnet restore
       - run:
@@ -59,6 +61,7 @@ jobs:
       - run:
           name: Run Tests
           command: dotnet test --no-build --verbosity normal
+      - needs: dotnet-ci-order-service
 
 workflows:
   version: 2
@@ -67,3 +70,4 @@ workflows:
       - nodejs-ci
       - dotnet-ci-order-service
       - dotnet-ci-product-service
+
