@@ -174,7 +174,9 @@ workflows:
       - trigger-codebuild-orderservice:
           requires:
             - terraform-ci
-      - trigger-codebuild-productservice
+      - trigger-codebuild-productservice:
+          requires:
+            - terraform-ci
       - build-and-push-frontend:
           requires:
             - trigger-codebuild-productservice
