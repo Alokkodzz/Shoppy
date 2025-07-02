@@ -10,6 +10,31 @@ executors:
   dotnet_executor_2:
     docker:
       - image: mcr.microsoft.com/dotnet/sdk:6.0
+  aws-cli-executor:
+    docker:
+      - image: amazon/aws-cli:2.15.14
+    environment:
+      AWS_REGION: "us-east-1"
+      AWS_ACCESS_KEY_ID: ""
+      AWS_SECRET_ACCESS_KEY: ""
+  terraform_executor:
+    docker:
+      - image: hashicorp/terraform:1.5.7
+    working_directory: ~/shoppy/infra
+    environment:
+      AWS_REGION: "us-east-1"
+      AWS_ACCESS_KEY_ID: ""
+      AWS_SECRET_ACCESS_KEY: ""
+  docker-executor:
+    docker:
+      - image: cimg/base:stable  # CircleCI convenience image
+    working_directory: ~/shoppy/frontend
+    environment:
+      AWS_REGION: "us-east-1"
+      AWS_ACCESS_KEY_ID: ""
+      AWS_SECRET_ACCESS_KEY: ""
+      AWS_ACCOUNT_ID: ""  # Your AWS account ID for ECR
+  
 
 jobs:
   nodejs-ci:
@@ -61,6 +86,77 @@ jobs:
           name: Run Tests
           command: dotnet test --no-build --verbosity normal
 
+  terraform-ci:
+     executor: terraform_executor
+     steps:
+        - checkout:
+            path: ~/shoppy/infra
+        - run:
+            name: Initialize Terraform
+            command: | 
+              terraform init
+        - run:
+            name: Validate Terraform Configuration
+            command: |
+              terraform validate
+        - run:
+            name: Plan Terraform Changes
+            command: |
+              terraform plan
+
+  trigger-codebuild-orderservice:
+    executor: aws-cli-executor
+    steps:
+      - checkout
+      - run:
+          name: Trigger AWS CodeBuild project
+          command: |
+            aws codebuild start-build --project-name my-codebuild-project
+
+  trigger-codebuild-productservice:
+    executor: aws-cli-executor
+    steps:
+      - checkout
+      - run:
+          name: Trigger AWS CodeBuild project
+          command: |
+            aws codebuild start-build --project-name my-codebuild-project
+
+  build-and-push-frontend:
+    executor: docker-executor
+    steps:
+      - checkout:
+          path: ~/shoppy/frontend
+      - run:
+          name: Set Image Tag
+          command: |
+            IMAGE_TAG=$(cat ./VERSION)
+            echo "export IMAGE_TAG=$IMAGE_TAG" >> $BASH_ENV
+      - run:
+          name: Install AWS CLI
+          command: |
+            sudo apt-get update
+            sudo apt-get install -y awscli
+      - run:
+          name: Authenticate Docker to AWS ECR
+          command: |
+            aws --version
+            aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com
+      - run:
+          name: Build Docker image
+          command: |
+            docker build -t frontend .
+      - run:
+          name: Tag Docker image
+          command: |
+            source $BASH_ENV
+            docker tag frontend:latest $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/frontend:$IMAGE_TAG
+      - run:
+          name: Push Docker image to ECR
+          command: |
+            source $BASH_ENV
+            docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/frontend:$IMAGE_TAG
+
 workflows:
   version: 2
   build_and_test:
@@ -72,3 +168,13 @@ workflows:
       - dotnet-ci-product-service:
           requires:
             - dotnet-ci-order-service
+      - terraform-ci:
+          requires:
+            - dotnet-ci-product-service
+      - trigger-codebuild-orderservice:
+          requires:
+            - terraform-ci
+      - trigger-codebuild-productservice
+      - build-and-push-frontend:
+          requires:
+            - trigger-codebuild-productservice
