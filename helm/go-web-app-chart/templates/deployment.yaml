@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend
+  namespace: shoppy
+  labels:
+    app: shoppy-frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: shoppy-frontend
+  template:
+    metadata:
+      labels:
+        app: shoppy-frontend
+        kubernetes.io/name: frontend
+        kubernetes.io/part-of: shoppy 
+    spec:
+      containers:
+      - name: shoppy-frontend
+        image: {{ .Values.images.repository }}: {{ .Values.images.tag }}
+        imagepullPolicy: {{ .Values.images.pullPolicy }}
+        ports:
+        - containerPort: 8080
