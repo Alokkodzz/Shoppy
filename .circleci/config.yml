@@ -94,14 +94,17 @@ jobs:
             path: ~/shoppy
         - run:
             name: Initialize Terraform
+            working_directory: ~/shoppy/infra
             command: | 
               terraform init
         - run:
             name: Validate Terraform Configuration
+            working_directory: ~/shoppy/infra
             command: |
               terraform validate
         - run:
             name: Plan Terraform Changes
+            working_directory: ~/shoppy/infra
             command: |
               terraform plan
 
