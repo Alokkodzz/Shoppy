@@ -15,23 +15,17 @@ executors:
       - image: amazon/aws-cli:2.15.14
     environment:
       AWS_REGION: "us-east-1"
-      AWS_ACCESS_KEY_ID: << pipeline.parameters.AWS_ACCESS_KEY_ID >>
-      AWS_SECRET_ACCESS_KEY: << pipeline.parameters.AWS_SECRET_ACCESS_KEY >>
   terraform_executor:
     docker:
       - image: hashicorp/terraform:1.5.7
     environment:
       AWS_REGION: "us-east-1"
-      AWS_ACCESS_KEY_ID: << pipeline.parameters.AWS_ACCESS_KEY_ID >>
-      AWS_SECRET_ACCESS_KEY: << pipeline.parameters.AWS_SECRET_ACCESS_KEY >>
   docker-executor:
     docker:
       - image: cimg/base:stable  # CircleCI convenience image
     working_directory: ~/shoppy/frontend
     environment:
       AWS_REGION: "us-east-1"
-      AWS_ACCESS_KEY_ID: << pipeline.parameters.AWS_ACCESS_KEY_ID >>
-      AWS_SECRET_ACCESS_KEY: << pipeline.parameters.AWS_SECRET_ACCESS_KEY >>
       AWS_ACCOUNT_ID: "690596055323"  # Your AWS account ID for ECR
   
 
