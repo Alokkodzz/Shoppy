@@ -90,8 +90,7 @@ jobs:
      executor: terraform_executor
      working_directory: ~/shoppy/infra
      steps:
-        - checkout:
-            path: ~/shoppy
+        - checkout
         - run:
             name: Initialize Terraform
             command: | 
