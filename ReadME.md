@@ -9,3 +9,10 @@ beore running application:
 2. Update the aws keys in docker file
 3. Run the sql scripts for DB creations if required
 4. Updates the DB connection string IF required
+
+
+To allow in Windows Firewall:
+New-NetFirewallRule -DisplayName "Allow Port 5000" -Direction Inbound -LocalPort 5000 -Protocol TCP -Action Allow
+
+Administrator
+CZqV@R7!Fj@Ih.M@vW=HMiB-Q0c.!L!D

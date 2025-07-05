@@ -35,14 +35,26 @@ resource "aws_launch_template" "PSA_template" {
   name_prefix   = "PSA-template"
   image_id      = var.ami # Windows Server AMI
   instance_type = var.instance_type
-  key_name      = "windows"
+  key_name      = "win"
   vpc_security_group_ids = [aws_security_group.PSA_asg_sg.id]
 
   user_data = base64encode(<<-EOF
     <powershell>
       Start-Transcript -Path "C:\\bootstrap-log.txt"
-      Invoke-WebRequest "https://alok-production-artifacts.s3.us-east-1.amazonaws.com/productservice/bootstrap_product.ps1" -OutFile "C:\\bootstrap.ps1"
+      write-host "Starting iis installation"
+      Install-WindowsFeature -Name Web-Server, Web-WebServer, Web-App-Dev, Web-Net-Ext, Web-Net-Ext45, Web-ASP, Web-Asp-Net, Web-Asp-Net45, Web-CGI, Web-ISAPI-Ext, Web-ISAPI-Filter, Web-Includes, Web-WebSockets, Web-AppInit -IncludeManagementTools
+      $dotnetInstaller = "https://builds.dotnet.microsoft.com/dotnet/Sdk/6.0.428/dotnet-sdk-6.0.428-win-x64.exe"
+      Invoke-WebRequest $dotnetInstaller -OutFile "C:\\dotnet6.exe"
+      write-host "Starting dotnet6 installation"
+      Start-Process "C:\\dotnet6.exe" -ArgumentList "/quiet" -Wait
+      $dotnetInstaller_1 = "https://builds.dotnet.microsoft.com/dotnet/aspnetcore/Runtime/6.0.36/dotnet-hosting-6.0.36-win.exe"
+      Invoke-WebRequest $dotnetInstaller_1 -OutFile "C:\\dotnet6_hosting.exe"
+      Start-Process "C:\\dotnet6_hosting.exe" -ArgumentList "/quiet" -Wait
+      write-host "downloading bootstrap script"
+      Invoke-WebRequest "https://shoppy-artifacts.s3.us-east-1.amazonaws.com/bootstrap_product.ps1" -OutFile "C:\\bootstrap.ps1"
       & "C:\\bootstrap.ps1"
+      write-host "adding firewall rule for port 5001"
+      New-NetFirewallRule -DisplayName "Allow Port 5001" -Direction Inbound -LocalPort 5001 -Protocol TCP -Action Allow
       stop-Transcript
     </powershell>
     <persist>true</persist>
@@ -52,9 +64,9 @@ resource "aws_launch_template" "PSA_template" {
 
 
 resource "aws_autoscaling_group" "PSA_asg" {
-  name  = "SB1-batch"
-  desired_capacity     = 2
-  max_size            = 2
+  name  = "psa-batch"
+  desired_capacity     = 1
+  max_size            = 1
   min_size            = 1
   vpc_zone_identifier = var.public_subnet_ids
 
@@ -105,7 +117,7 @@ resource "aws_lb_target_group" "PSA_alb_target_group" {
   vpc_id   = var.vpc_id
 
   health_check {
-    path                = "/api/hello"  # Or a dedicated health endpoint
+    path                = "/swagger"  # Or a dedicated health endpoint
     port                = "traffic-port" # Uses the same port (5002)
     healthy_threshold   = 2
     unhealthy_threshold = 2

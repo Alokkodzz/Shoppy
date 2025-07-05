@@ -15,25 +15,25 @@ executors:
       - image: amazon/aws-cli:2.15.14
     environment:
       AWS_REGION: "us-east-1"
-      AWS_ACCESS_KEY_ID: ""
-      AWS_SECRET_ACCESS_KEY: ""
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
   terraform_executor:
     docker:
       - image: hashicorp/terraform:1.5.7
     working_directory: ~/shoppy/infra
     environment:
       AWS_REGION: "us-east-1"
-      AWS_ACCESS_KEY_ID: ""
-      AWS_SECRET_ACCESS_KEY: ""
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
   docker-executor:
     docker:
       - image: cimg/base:stable  # CircleCI convenience image
     working_directory: ~/shoppy/frontend
     environment:
       AWS_REGION: "us-east-1"
-      AWS_ACCESS_KEY_ID: ""
-      AWS_SECRET_ACCESS_KEY: ""
-      AWS_ACCOUNT_ID: ""  # Your AWS account ID for ECR
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      AWS_ACCOUNT_ID: "690596055323"  # Your AWS account ID for ECR
   
 
 jobs:
@@ -111,7 +111,7 @@ jobs:
       - run:
           name: Trigger AWS CodeBuild project
           command: |
-            aws codebuild start-build --project-name my-codebuild-project
+            aws codebuild start-build --project-name OSA_Build
 
   trigger-codebuild-productservice:
     executor: aws-cli-executor
@@ -120,7 +120,7 @@ jobs:
       - run:
           name: Trigger AWS CodeBuild project
           command: |
-            aws codebuild start-build --project-name my-codebuild-project
+            aws codebuild start-build --project-name PSA_Build
 
   build-and-push-frontend:
     executor: docker-executor
