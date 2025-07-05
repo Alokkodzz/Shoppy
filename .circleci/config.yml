@@ -88,9 +88,10 @@ jobs:
 
   terraform-ci:
      executor: terraform_executor
+     working_directory: ~/shoppy/infra
      steps:
         - checkout:
-            path: ~/shoppy/infra
+            path: ~/shoppy
         - run:
             name: Initialize Terraform
             command: | 
@@ -124,9 +125,10 @@ jobs:
 
   build-and-push-frontend:
     executor: docker-executor
+    working_directory: ~/shoppy/frontend
     steps:
       - checkout:
-          path: ~/shoppy/frontend
+          path: ~/shoppy
       - run:
           name: Set Image Tag
           command: |
