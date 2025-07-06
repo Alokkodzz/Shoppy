@@ -108,8 +108,26 @@ jobs:
       - run:
           name: Trigger AWS CodeBuild project
           command: |
-            aws codebuild start-build --project-name OSA_Build
+            # Start CodeBuild and capture build ID
+            BUILD_ID=$(aws codebuild start-build --project-name OSA_Build --query 'build.id' --output text)
+            echo "Triggered build: $BUILD_ID"
 
+            # Polling loop to check build status
+            while true; do
+              STATUS=$(aws codebuild batch-get-builds --ids "$BUILD_ID" --query 'builds[0].buildStatus' --output text)
+              echo "Current build status: $STATUS"
+              
+              if [ "$STATUS" = "SUCCEEDED" ]; then
+                echo "Build succeeded."
+                break
+              elif [ "$STATUS" = "FAILED" ] || [ "$STATUS" = "FAULT" ] || [ "$STATUS" = "STOPPED" ]; then
+                echo "Build failed or stopped with status: $STATUS"
+                exit 1
+              else
+                echo "Waiting for build to complete..."
+                sleep 10
+              fi
+            done
   trigger-codebuild-productservice:
     executor: aws-cli-executor
     steps:
@@ -117,7 +135,26 @@ jobs:
       - run:
           name: Trigger AWS CodeBuild project
           command: |
-            aws codebuild start-build --project-name PSA_Build
+            # Start CodeBuild and capture build ID
+            BUILD_ID=$(aws codebuild start-build --project-name PSA_Build --query 'build.id' --output text)
+            echo "Triggered build: $BUILD_ID"
+
+            # Polling loop to check build status
+            while true; do
+              STATUS=$(aws codebuild batch-get-builds --ids "$BUILD_ID" --query 'builds[0].buildStatus' --output text)
+              echo "Current build status: $STATUS"
+              
+              if [ "$STATUS" = "SUCCEEDED" ]; then
+                echo "Build succeeded."
+                break
+              elif [ "$STATUS" = "FAILED" ] || [ "$STATUS" = "FAULT" ] || [ "$STATUS" = "STOPPED" ]; then
+                echo "Build failed or stopped with status: $STATUS"
+                exit 1
+              else
+                echo "Waiting for build to complete..."
+                sleep 10
+              fi
+            done
 
   build-and-push-frontend:
     executor: docker-executor
