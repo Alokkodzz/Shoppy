@@ -22,7 +22,7 @@ executors:
       AWS_REGION: "us-east-1"
   docker-executor:
     docker:
-      - image: ubuntu-2204:2024.01.1  # CircleCI convenience image
+      - image: cimg/base:stable  # CircleCI convenience image
     working_directory: ~/shoppy/frontend
     environment:
       AWS_REGION: "us-east-1"
@@ -162,6 +162,7 @@ jobs:
     steps:
       - checkout:
           path: ~/shoppy
+      - setup_remote_docker
       - run:
           name: Set Image Tag
           command: |
