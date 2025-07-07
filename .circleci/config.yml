@@ -15,25 +15,18 @@ executors:
       - image: amazon/aws-cli:2.15.14
     environment:
       AWS_REGION: "us-east-1"
-      AWS_ACCESS_KEY_ID: ""
-      AWS_SECRET_ACCESS_KEY: ""
   terraform_executor:
     docker:
       - image: hashicorp/terraform:1.5.7
-    working_directory: ~/shoppy/infra
     environment:
       AWS_REGION: "us-east-1"
-      AWS_ACCESS_KEY_ID: ""
-      AWS_SECRET_ACCESS_KEY: ""
   docker-executor:
     docker:
       - image: cimg/base:stable  # CircleCI convenience image
     working_directory: ~/shoppy/frontend
     environment:
       AWS_REGION: "us-east-1"
-      AWS_ACCESS_KEY_ID: ""
-      AWS_SECRET_ACCESS_KEY: ""
-      AWS_ACCOUNT_ID: ""  # Your AWS account ID for ECR
+      AWS_ACCOUNT_ID: "690596055323"  # Your AWS account ID for ECR
   
 
 jobs:
@@ -88,19 +81,23 @@ jobs:
 
   terraform-ci:
      executor: terraform_executor
+     working_directory: ~/shoppy/Infra
      steps:
         - checkout:
-            path: ~/shoppy/infra
+            path: ~/shoppy
         - run:
             name: Initialize Terraform
+            #working_directory: ~/shoppy/infra
             command: | 
               terraform init
         - run:
             name: Validate Terraform Configuration
+            #working_directory: ~/shoppy/infra
             command: |
               terraform validate
         - run:
             name: Plan Terraform Changes
+            #working_directory: ~/shoppy/infra
             command: |
               terraform plan
 
@@ -111,8 +108,26 @@ jobs:
       - run:
           name: Trigger AWS CodeBuild project
           command: |
-            aws codebuild start-build --project-name my-codebuild-project
+            # Start CodeBuild and capture build ID
+            BUILD_ID=$(aws codebuild start-build --project-name OSA_Build --query 'build.id' --output text)
+            echo "Triggered build: $BUILD_ID"
 
+            # Polling loop to check build status
+            while true; do
+              STATUS=$(aws codebuild batch-get-builds --ids "$BUILD_ID" --query 'builds[0].buildStatus' --output text)
+              echo "Current build status: $STATUS"
+              
+              if [ "$STATUS" = "SUCCEEDED" ]; then
+                echo "Build succeeded."
+                break
+              elif [ "$STATUS" = "FAILED" ] || [ "$STATUS" = "FAULT" ] || [ "$STATUS" = "STOPPED" ]; then
+                echo "Build failed or stopped with status: $STATUS"
+                exit 1
+              else
+                echo "Waiting for build to complete..."
+                sleep 10
+              fi
+            done
   trigger-codebuild-productservice:
     executor: aws-cli-executor
     steps:
@@ -120,13 +135,34 @@ jobs:
       - run:
           name: Trigger AWS CodeBuild project
           command: |
-            aws codebuild start-build --project-name my-codebuild-project
+            # Start CodeBuild and capture build ID
+            BUILD_ID=$(aws codebuild start-build --project-name PSA_Build --query 'build.id' --output text)
+            echo "Triggered build: $BUILD_ID"
+
+            # Polling loop to check build status
+            while true; do
+              STATUS=$(aws codebuild batch-get-builds --ids "$BUILD_ID" --query 'builds[0].buildStatus' --output text)
+              echo "Current build status: $STATUS"
+              
+              if [ "$STATUS" = "SUCCEEDED" ]; then
+                echo "Build succeeded."
+                break
+              elif [ "$STATUS" = "FAILED" ] || [ "$STATUS" = "FAULT" ] || [ "$STATUS" = "STOPPED" ]; then
+                echo "Build failed or stopped with status: $STATUS"
+                exit 1
+              else
+                echo "Waiting for build to complete..."
+                sleep 10
+              fi
+            done
 
   build-and-push-frontend:
     executor: docker-executor
+    working_directory: ~/shoppy/frontend
     steps:
       - checkout:
-          path: ~/shoppy/frontend
+          path: ~/shoppy
+      - setup_remote_docker
       - run:
           name: Set Image Tag
           command: |
