@@ -49,29 +49,29 @@ jobs:
       
       - name: Doube ASG count
         run: |
-          Current_Desired_count=$(aws autoscaling describe-auto-scaling-groups --auto-scaling-group-names OSA --query "AutoScalingGroups[0].DesiredCapacity")
+          Current_Desired_count=$(aws autoscaling describe-auto-scaling-groups --auto-scaling-group-names OSA-batch --query "AutoScalingGroups[0].DesiredCapacity")
 
           OSA_New_Desired_count=$(( Current_Desired_count * 2 ))
 
-          aws autoscaling update-auto-scaling-group --auto-scaling-group-name OSA --min-size $OSA_New_Desired_count --max-size $OSA_New_Desired_count
+          aws autoscaling update-auto-scaling-group --auto-scaling-group-name OSA-batch --min-size $OSA_New_Desired_count --max-size $OSA_New_Desired_count
           
-          Current_Desired_count=$(aws autoscaling describe-auto-scaling-groups --auto-scaling-group-names PSA --query "AutoScalingGroups[0].DesiredCapacity")
+          Current_Desired_count=$(aws autoscaling describe-auto-scaling-groups --auto-scaling-group-names psa-batch --query "AutoScalingGroups[0].DesiredCapacity")
 
           PSA_New_Desired_count=$(( Current_Desired_count * 2 ))
 
-          aws autoscaling update-auto-scaling-group --auto-scaling-group-name PSA --min-size $PSA_New_Desired_count --max-size $PSA_New_Desired_count
+          aws autoscaling update-auto-scaling-group --auto-scaling-group-name psa-batch --min-size $PSA_New_Desired_count --max-size $PSA_New_Desired_count
 
           sleep 240
       - name: Decrease ASG count
         run: |
           sleep 240
-          New_count=$(aws autoscaling describe-auto-scaling-groups --auto-scaling-group-names OSA --query "AutoScalingGroups[0].DesiredCapacity")
+          New_count=$(aws autoscaling describe-auto-scaling-groups --auto-scaling-group-names OSA-batch --query "AutoScalingGroups[0].DesiredCapacity")
           OSA_Rotate_Instance=$(( New_count / 2 ))
-          aws autoscaling update-auto-scaling-group --auto-scaling-group-name SB1-batch --min-size $OSA_Rotate_Instance --max-size $OSA_Rotate_Instance
+          aws autoscaling update-auto-scaling-group --auto-scaling-group-name OSA-batch --min-size $OSA_Rotate_Instance --max-size $OSA_Rotate_Instance
 
-          New_count=$(aws autoscaling describe-auto-scaling-groups --auto-scaling-group-names PSA --query "AutoScalingGroups[0].DesiredCapacity")
+          New_count=$(aws autoscaling describe-auto-scaling-groups --auto-scaling-group-names psa-batch --query "AutoScalingGroups[0].DesiredCapacity")
           PSA_Rotate_Instance=$(( New_count / 2 ))
-          aws autoscaling update-auto-scaling-group --auto-scaling-group-name SB1-batch --min-size $PSA_Rotate_Instance --max-size $PSA_Rotate_Instance
+          aws autoscaling update-auto-scaling-group --auto-scaling-group-name psa-batch --min-size $PSA_Rotate_Instance --max-size $PSA_Rotate_Instance
   update-newtag-in-helm-chart:
     runs-on: ubuntu-latest
     needs: terraform
