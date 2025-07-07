@@ -23,7 +23,7 @@ resource "aws_iam_role_policy_attachment" "TF_cluster_AmazonEKSClusterPolicy" {
 }
 
 resource "aws_eks_cluster" "TF_eks_cluster" {
-  name = "TF_eks_cluster"
+  name = "shoppy-eks-cluster"
 
   role_arn = aws_iam_role.TF_cluster_role.arn
   version  = var.cluster_version

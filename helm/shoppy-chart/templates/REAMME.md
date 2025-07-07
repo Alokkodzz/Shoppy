@@ -5,7 +5,7 @@
 #### commands to configure IAM OIDC provider 
 
 ```
-export cluster_name=demo-cluster
+export cluster_name=TF_eks_cluster
 ```
 
 ```
@@ -25,7 +25,7 @@ eksctl utils associate-iam-oidc-provider --cluster $cluster_name --approve
 ## Download IAM policy
 
 ```
-curl -O https://raw.githubusercontent.com/kubernetes-sigs/aws-load-balancer-controller/v2.11.0/docs/install/iam_policy.json
+curl -O https://raw.githubusercontent.com/kubernetes-sigs/aws-load-balancer-controller/v2.13.3/docs/install/iam_policy.json
 ```
 
 Create IAM Policy
@@ -40,11 +40,11 @@ Create IAM Role
 
 ```
 eksctl create iamserviceaccount \
-  --cluster=<your-cluster-name> \
+  --cluster=TF_eks_cluster \
   --namespace=kube-system \
   --name=aws-load-balancer-controller \
   --role-name AmazonEKSLoadBalancerControllerRole \
-  --attach-policy-arn=arn:aws:iam::<your-aws-account-id>:policy/AWSLoadBalancerControllerIAMPolicy \
+  --attach-policy-arn=arn:aws:iam::690596055323:policy/AWSLoadBalancerControllerIAMPolicy \
   --approve
 ```
 
