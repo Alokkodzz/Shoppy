@@ -89,7 +89,7 @@ jobs:
 
       - name: Update tag in Helm chart
         run: |
-          sed -i 's/tag: .*/tag: "${{ env.VERSION }}"/' helm/go-web-app-chart/values.yaml
+          sed -i 's/tag: .*/tag: "${{ env.VERSION }}"/' helm/shoppy-chart/values.yaml
 
       - name: Commit and push changes
         run: |
