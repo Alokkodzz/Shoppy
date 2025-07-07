@@ -85,7 +85,7 @@ jobs:
         
       - name: Read version
         id: version
-        run: echo "VERSION=$(cat shoppy/frontend/VERSION)" >> $GITHUB_ENV
+        run: echo "VERSION=$(cat frontend/VERSION)" >> $GITHUB_ENV
 
       - name: Update tag in Helm chart
         run: |
