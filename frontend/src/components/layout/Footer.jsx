@@ -20,7 +20,7 @@ const Footer = () => {
           © {new Date().getFullYear()} Shoppy - All rights reserved
         </Typography>
         <Typography variant="body2" align="center" color="text.secondary">
-          An e-commerce platform build by Alok
+          An e-commerce platform build by AlokKodzz
         </Typography>
       </Container>
     </Box>
