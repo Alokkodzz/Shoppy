@@ -111,5 +111,4 @@ COMMENT ON COLUMN "__EFMigrationsHistory"."ProductVersion" IS 'The version of EF
 -- Grant permissions to your service user
 GRANT SELECT, INSERT ON "__EFMigrationsHistory" TO order_service_user;
 
-ALTER TABLE "Orders";
-ALTER COLUMN "Status" TYPE TEXT USING "Status"::TEXT;
+ALTER TABLE "Orders" ALTER COLUMN "Status" TYPE TEXT USING "Status"::TEXT;

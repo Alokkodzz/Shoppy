@@ -2,7 +2,7 @@ import axios from 'axios';
 
 //const API_URL = process.env.VITE_PRODUCT_SERVICE_URL || 'http://3.94.57.46:5002/api';
 
-const API_URL = 'http://3.94.57.46:5002/api';
+const API_URL = 'http://OSA-alb-tf-614468803.us-east-1.elb.amazonaws.com/api';
 
 export const createOrder = async (orderData) => {
   try {

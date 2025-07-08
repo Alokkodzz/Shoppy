@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = process.env.VITE_ORDER_SERVICE_URL || 'http://3.94.57.46:5001/api';
+const API_URL = 'http://PSA-alb-tf-837559109.us-east-1.elb.amazonaws.com/api';
 
 export const getProducts = async (page = 1, pageSize = 10) => {
   try {
