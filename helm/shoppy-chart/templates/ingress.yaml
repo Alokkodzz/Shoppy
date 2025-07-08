@@ -1,3 +1,4 @@
+---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
@@ -19,4 +20,4 @@ spec:
               service:
                 name: frontend-svc
                 port:
-                  number: 3000
+                  number: 80
