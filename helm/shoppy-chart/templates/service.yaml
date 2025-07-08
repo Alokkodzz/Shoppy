@@ -5,11 +5,10 @@ metadata:
   namespace: shoppy
 spec:
   selector:
-    app: shoppy-frontend
-    kubernetes.io/name: frontend
-    kubernetes.io/part-of: shoppy
+    shoppy.io/name: shoppy-frontend
+    app.kubernetes.io/name: shoppy-frontend
   type: {{ .Values.service.type }}
   ports:
     - protocol: TCP
       port: 80
-      targetPort: 8080
+      targetPort: 3000

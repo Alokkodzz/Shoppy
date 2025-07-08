@@ -1,11 +1,11 @@
 replicaCount: 1
 
 images:
-  repository: alokkodzz/go
+  repository: 690596055323.dkr.ecr.us-east-1.amazonaws.com/frontend
   # This sets the pull policy for images.
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: "12213987759"
+  tag: ""
 
 imagePullSecrets: []
 # This is to override the chart name.

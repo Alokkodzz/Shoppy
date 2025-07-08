@@ -5,7 +5,7 @@
 #### commands to configure IAM OIDC provider 
 
 ```
-export cluster_name=TF_eks_cluster
+export cluster_name=shoppy-eks-cluster
 ```
 
 ```
@@ -40,7 +40,7 @@ Create IAM Role
 
 ```
 eksctl create iamserviceaccount \
-  --cluster=TF_eks_cluster \
+  --cluster=shoppy-eks-cluster \
   --namespace=kube-system \
   --name=aws-load-balancer-controller \
   --role-name AmazonEKSLoadBalancerControllerRole \
@@ -67,11 +67,11 @@ Install
 ```
 helm install aws-load-balancer-controller eks/aws-load-balancer-controller \            
   -n kube-system \
-  --set clusterName=<your-cluster-name> \
+  --set clusterName=shoppy-eks-cluster \
   --set serviceAccount.create=false \
   --set serviceAccount.name=aws-load-balancer-controller \
-  --set region=<region> \
-  --set vpcId=<your-vpc-id>
+  --set region=us-east-1 \
+  --set vpcId=vpc-01c3876785c5fb23a
 ```
 
 Verify that the deployments are running.
