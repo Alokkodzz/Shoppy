@@ -1,5 +1,12 @@
 version: 0.2
 
+env:
+  variables:
+    AWS__Region: "us-east-1"
+  parameter-store:
+    AWS__AccessKeyId: "accesskey"
+    AWS__SecretAccessKey: "secretkey"
+
 phases:
   install:
     runtime-versions:
