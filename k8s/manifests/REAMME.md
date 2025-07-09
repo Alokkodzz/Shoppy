@@ -71,13 +71,14 @@ helm install aws-load-balancer-controller eks/aws-load-balancer-controller \
   --set serviceAccount.create=false \
   --set serviceAccount.name=aws-load-balancer-controller \
   --set region=us-east-1 \
-  --set vpcId=vpc-038431303a6831417
+  --set vpcId=vpc-0c46d7ccce2a588d4
 ```
 
 Verify that the deployments are running.
 
 ```
 kubectl get deployment -n kube-system aws-load-balancer-controller
+kubectl get pods -n kube-system
 ```
 
 You might face the issue, unable to see the loadbalancer address while giving k get ing -n robot-shop at the end. To avoid this your **AWSLoadBalancerControllerIAMPolicy** should have the required permissions for elasticloadbalancing:DescribeListenerAttributes.
