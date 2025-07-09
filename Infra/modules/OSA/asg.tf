@@ -31,6 +31,7 @@ resource "aws_security_group" "OSA_asg_sg" {
   }
 }
 
+
 resource "aws_launch_template" "OSA_template" {
   name_prefix   = "OSA-template"
   image_id      = var.ami # Windows Server AMI

@@ -14,6 +14,9 @@ phases:
     commands:
       - echo "Installing dependencies..."
       - dotnet restore product-service/ProductService.sln
+      - echo "Region is $AWS__Region"
+      - echo "Access Key is $AWS__AccessKeyId"
+      - echo "Secret Key is $AWS__SecretAccessKey"
   build:
     commands:
       - echo "Building the .NET 6.0 application..."

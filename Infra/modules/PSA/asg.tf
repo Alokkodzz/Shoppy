@@ -31,12 +31,59 @@ resource "aws_security_group" "PSA_asg_sg" {
   }
 }
 
+resource "aws_iam_role" "ec2_s3_access_role" {
+  name = "EC2S3AccessRole"
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [{
+      Effect = "Allow"
+      Principal = {
+        Service = "ec2.amazonaws.com"
+      }
+      Action = "sts:AssumeRole"
+    }]
+  })
+}
+
+resource "aws_iam_policy" "s3_access_policy" {
+  name        = "EC2S3FullAccessPolicy"
+  description = "Allow EC2 instances to access all S3 buckets"
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [{
+      Effect = "Allow"
+      Action = [
+        "s3:GetObject",
+        "s3:PutObject",
+        "s3:ListBucket"
+      ]
+      Resource = "*"
+    }]
+  })
+}
+
+resource "aws_iam_role_policy_attachment" "ec2_s3_access_attach" {
+  role       = aws_iam_role.ec2_s3_access_role.name
+  policy_arn = aws_iam_policy.s3_access_policy.arn
+}
+
+resource "aws_iam_instance_profile" "ec2_instance_profile" {
+  name = "EC2S3AccessInstanceProfile"
+  role = aws_iam_role.ec2_s3_access_role.name
+}
+
 resource "aws_launch_template" "PSA_template" {
   name_prefix   = "PSA-template"
   image_id      = var.ami # Windows Server AMI
   instance_type = var.instance_type
   key_name      = "win"
   vpc_security_group_ids = [aws_security_group.PSA_asg_sg.id]
+
+  iam_instance_profile {
+    name = aws_iam_instance_profile.ec2_instance_profile.name
+  }
 
   user_data = base64encode(<<-EOF
     <powershell>
